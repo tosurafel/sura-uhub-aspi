@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="InsertCovidCaseMaster" doc:id="83c0aa64-d20a-4e45-aa61-cb92f25e0215" >
+		<logger level="DEBUG" doc:name="Start Log" doc:id="d50bfada-a14e-4b02-977d-1ca5c20ea0be" message='transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: "Before insert case database call", payload: #[payload]' />
+		<db:insert doc:id="bfdbed9c-0dd1-460b-9d32-ea724b87d030" config-ref="sura_uhub_db_Config" autoGenerateKeys="true" doc:name="Insert Covid Case Master">
+			<db:sql><![CDATA[insert into CVD_CASE_MASTER(case_source, case_type, first_name, last_name, phone, email, date_of_birth, national_id, national_id_type, street_address, city, state, postal, country, create_date, update_date, create_by, update_by) values(:case_source, :case_type, :first_name, :last_name, :phone, :email, STR_TO_DATE(:date_of_birth, '%Y-%m-%d'), :national_id, :national_id_type, :street_address, :city, :state, :postal, :country, STR_TO_DATE(:create_date, '%Y-%m-%d'), STR_TO_DATE(:update_date, '%Y-%m-%d'), :create_by, :update_by)
+]]></db:sql>
+			<db:input-parameters><![CDATA[#[vars.covidPayload]]]></db:input-parameters>
+			<db:auto-generated-keys-column-names>
+				<db:auto-generated-keys-column-name value="CASE_ID" />
+			</db:auto-generated-keys-column-names>
+		</db:insert>
+		<logger level="DEBUG" doc:name="End Log" doc:id="ee1615d0-c12f-4c31-901b-f39c5376347f" message='transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: "Completed insert case database call"' />
+	</sub-flow>
+	<sub-flow name="UpdateCovidCaseMaster" doc:id="7357e511-a045-4eb3-a0bc-556a9d6b9c32">
+		<logger level="DEBUG" doc:name="Start Log" doc:id="93e01a55-ce08-41b0-9b31-f9745ceba89b" message='transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: "Before update case database call", payload: #[payload]' />
+		<db:update doc:name="Update Covid Case Master" doc:id="4b6f84e6-8ac2-43e4-bfe8-4f479807ec2f" config-ref="sura_uhub_db_Config">
+			<db:sql><![CDATA[update CVD_CASE_MASTER set case_source=:case_source, case_type=:case_type, first_name=:first_name, last_name=:last_name, phone=:phone, email=:email, date_of_birth=STR_TO_DATE(:date_of_birth, '%Y-%m-%d'), national_id=:national_id, national_id_type=:national_id_type, street_address=:street_address, city=:city, state=:state, postal=:postal, country=:country, update_date=STR_TO_DATE(:update_date, '%Y-%m-%d'), create_by=:create_by, update_by=:update_by where case_id=:case_id]]></db:sql>
+			<db:input-parameters><![CDATA[#[vars.covidCasePayload]]]></db:input-parameters>
+		</db:update>
+		<logger level="DEBUG" doc:name="End Log" doc:id="8875b067-fe1b-44f9-a9e0-739cb65e7c74" message='transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: "Completed update case database call"' />
+	</sub-flow>
+	<sub-flow name="SelectCaseByNationalID" doc:id="6a464518-6f92-4e16-8de4-a9443fe293e0">
+		<logger level="DEBUG" doc:name="Start Log" doc:id="e24b13b7-7963-4f51-b0f8-2e51a5ef51b6" message='transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: "Before fetching case by national id database call"' />
+		<db:select doc:name="Select Case by NationalID" doc:id="c8688388-020b-4c1f-905d-10a8e5fcbeb9" config-ref="sura_uhub_db_Config">
+			<db:sql><![CDATA[select case_id, case_source, case_type, first_name, last_name, phone, email, date_of_birth, national_id, national_id_type, street_address, city, state, postal, country, create_date, update_date from CVD_CASE_MASTER where national_id = :national_id]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+	national_id: vars.nationalID
+}]]]></db:input-parameters>
+		</db:select>
+		<logger level="DEBUG" doc:name="End Log" doc:id="27b845b5-6512-49a0-b224-e053a3bb62aa" message='transactionID: #[vars.transactionId]], correlationID: #[vars.correlationID], message: Completed fetch case by national id database call"' />
+	</sub-flow>
+</mule>
