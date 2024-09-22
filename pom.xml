@@ -29,7 +29,7 @@
 						<configuration>
 							<cloudHubDeployment>
 								<applicationName>sura-uho-dev-uhub-sapi</applicationName>
-								<environment>DEV</environment>
+								<environment>dev</environment>
 								<region>us-east-1</region>
 								<workers>1</workers>
 								<workerType>MICRO</workerType>
@@ -76,7 +76,6 @@
 			</build>
 		</profile>
 	</profiles>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -92,10 +91,9 @@
 				<configuration>
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>4.3.0</muleVersion>
+						<muleVersion>4.7.0</muleVersion>
 						<username>${username}</username>
 						<password>${password}</password>
-						<businessGroup>UHIS</businessGroup>
 						<objectStoreV2>true</objectStoreV2>
 						<properties>
 							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
@@ -148,6 +146,12 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.30</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-objectstore-connector</artifactId>
+			<version>1.2.0</version>
+			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
 
