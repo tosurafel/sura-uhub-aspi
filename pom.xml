@@ -29,7 +29,7 @@
 						<configuration>
 							<cloudHubDeployment>
 								<applicationName>sura-uho-dev-uhub-sapi</applicationName>
-								<environment>dev</environment>
+								<environment>DEV</environment>
 								<region>us-east-1</region>
 								<workers>1</workers>
 								<workerType>MICRO</workerType>
@@ -58,7 +58,7 @@
 						<configuration>
 							<cloudHubDeployment>
 								<applicationName>sura-uho-test-uhub-sapi</applicationName>
-								<environment>test</environment>
+								<environment>TEST</environment>
 								<region>us-east-1</region>
 								<workers>1</workers>
 								<workerType>MICRO</workerType>
